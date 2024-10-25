@@ -15,3 +15,10 @@ def get_currently_playing():
     duration_ms = result['item']['duration_ms']
     return song_name, artist_name, progress_ms, duration_ms
 
+def format_time(ms: int):
+    """Convert milliseconds to MM:SS format"""
+    total_seconds = int(ms / 1000)
+    minutes = total_seconds // 60
+    seconds = total_seconds % 60
+    return f"{minutes:02d}:{seconds:02d}"
+
