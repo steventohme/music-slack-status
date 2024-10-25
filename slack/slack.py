@@ -13,13 +13,10 @@ class SlackClient:
         self.client = client
 
     def set_status(self, user_id:str,  status_text: str, status_emoji: str, status_expiration: int):
-        try:
-            self.client.users_profile_set(
-                user=user_id,
-                profile={
-                    "status_text": status_text,
-                    "status_emoji": status_emoji,
-                }
-            )
-        except: 
-            print(f"Failed to set status")
+        self.client.users_profile_set(
+            user=user_id,
+            profile={
+                "status_text": status_text,
+                "status_emoji": status_emoji,
+            }
+        )

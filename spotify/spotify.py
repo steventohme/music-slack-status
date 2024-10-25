@@ -11,6 +11,8 @@ class SpotifyClient:
 
     def get_currently_playing(self):
         result = self.sp.current_user_playing_track()
+        if not result:
+            return None, None, None, None
         song_name = result['item']['name']
         artist_name = result['item']['artists'][0]['name']
         progress_ms = result['progress_ms']
@@ -51,5 +53,7 @@ class SpotifyClient:
 
     def get_song_status(self):
         song_name, artist_name, progress_ms, duration_ms = self.get_currently_playing()
+        if song_name is None:
+            return False, "No song currently playing"
         progress_bar = self.create_song_progress_bar(progress_ms, duration_ms)
-        return f"{song_name} - {artist_name}\n{progress_bar}"
+        return True, f"{song_name} - {artist_name}\n{progress_bar}"

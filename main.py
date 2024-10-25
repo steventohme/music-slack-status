@@ -24,8 +24,9 @@ def main():
 
     while True:
         try:
-            status_text = spotify.get_song_status()
-            slack.set_status(user_id, status_text, status_emoji, status_expiration)
+            succeeded, status_text = spotify.get_song_status()
+            if succeeded:
+                slack.set_status(user_id, status_text, status_emoji, status_expiration)
         except Exception as e:
             print(f"Failed to set status: {e}")
 
