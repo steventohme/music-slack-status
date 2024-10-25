@@ -4,7 +4,7 @@ import sys
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python script.py <user-id>")
+        print("Usage: poetry run python main.py <user-id>")
         sys.exit(1)
 
 
