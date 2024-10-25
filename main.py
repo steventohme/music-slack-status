@@ -2,6 +2,7 @@ from slack.slack import SlackClient
 from spotify.spotify import SpotifyClient
 import sys
 import os
+import time
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -17,13 +18,18 @@ def main():
     
     spotify = SpotifyClient()
     slack = SlackClient()
-
-
-    status_text = spotify.get_song_status()
     status_emoji = ":notes:"
     status_expiration = 0
 
-    slack.set_status(user_id, status_text, status_emoji, status_expiration)
+
+    while True:
+        try:
+            status_text = spotify.get_song_status()
+            slack.set_status(user_id, status_text, status_emoji, status_expiration)
+        except Exception as e:
+            print(f"Failed to set status: {e}")
+
+        time.sleep(3)
 
 if __name__ == "__main__":
     main()
