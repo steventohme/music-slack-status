@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class Spotify:
+class SpotifyClient:
     def __init__(self):
         self.sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope="user-read-playback-state"))
 
@@ -17,7 +17,7 @@ class Spotify:
         duration_ms = result['item']['duration_ms']
         return song_name, artist_name, progress_ms, duration_ms
 
-    def create_song_progress_bar(self, progress_ms: int, duration_ms: int, width=30):
+    def create_song_progress_bar(self, progress_ms: int, duration_ms: int, width=10):
         """
         Create a text-based progress bar for song progress.
         
@@ -42,7 +42,7 @@ class Spotify:
         
         return f"[{bar}] {current_time}/{total_time}"
 
-    def format_time(ms: int):
+    def format_time(self, ms: int):
         """Convert milliseconds to MM:SS format"""
         total_seconds = int(ms / 1000)
         minutes = total_seconds // 60
@@ -52,4 +52,4 @@ class Spotify:
     def get_song_status(self):
         song_name, artist_name, progress_ms, duration_ms = self.get_currently_playing()
         progress_bar = self.create_song_progress_bar(progress_ms, duration_ms)
-        return f"🎵 {song_name} - {artist_name}\n{progress_bar}"
+        return f"{song_name} - {artist_name}\n{progress_bar}"
