@@ -8,6 +8,7 @@ load_dotenv()
 class SpotifyClient:
     def __init__(self):
         self.sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope="user-read-playback-state"))
+        self.iterations_paused = 0
 
     def get_currently_playing(self):
         result = self.sp.current_user_playing_track()
@@ -17,6 +18,11 @@ class SpotifyClient:
         artist_name = result['item']['artists'][0]['name']
         progress_ms = result['progress_ms']
         duration_ms = result['item']['duration_ms']
+        is_playing = result['is_playing']
+        if not is_playing:
+            self.iterations_paused += 1
+        else:
+            self.iterations_paused = 0
         return song_name, artist_name, progress_ms, duration_ms
 
     def create_song_progress_bar(self, progress_ms: int, duration_ms: int, width=10):
@@ -55,5 +61,7 @@ class SpotifyClient:
         song_name, artist_name, progress_ms, duration_ms = self.get_currently_playing()
         if song_name is None:
             return False, "No song currently playing"
+        if self.iterations_paused > 1:
+            return False, "Song paused for too long"
         progress_bar = self.create_song_progress_bar(progress_ms, duration_ms)
         return True, f"{song_name} - {artist_name}\n{progress_bar}"
